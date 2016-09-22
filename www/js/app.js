@@ -19,7 +19,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
         }
     });
 })
-
+ .config(function ($ionicConfigProvider) {
+     //fixed tab bar always at bottom
+     $ionicConfigProvider.tabs.position('bottom');
+ })
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
     // Turn off caching for demo simplicity's sake
@@ -54,7 +57,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
             }
         }
     })
-
+    .state('app.home', {
+        url: '/home',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/home.html',
+                controller: 'HomeCtrl'
+            },
+            'fabContent': {
+                template: ''
+            }
+        }
+    })
     .state('app.friends', {
         url: '/friends',
         views: {

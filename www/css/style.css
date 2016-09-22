@@ -77,3 +77,9 @@ p {
     position: fixed;
     bottom: 0;
 }
+.homebackground{
+    background-color: #eceff1;
+}
+.button-icon{
+    margin-top:60px; 
+}
