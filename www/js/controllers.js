@@ -143,13 +143,64 @@ angular.module('starter.controllers', [])
       });
   };
 })
-.controller('HomeCtrl', function($scope, $stateParams, $timeout) {
+.controller('HomeCtrl', function($scope,FURL, $ionicPopup, $stateParams, $timeout, $firebaseArray, $cordovaFileTransfer, $location, $cordovaCapture) {
     // Set Header
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
     $scope.isExpanded = false;
     $scope.$parent.setExpanded(false);
     $scope.$parent.setHeaderFab(false);
+    $scope.item= [];
+    var ref = new Firebase(FURL);
+ //var fb = new Firebase("https://dashpro.firebaseio.com/videos");
+ //$scope.videos = $firebaseArray(fb);
+$scope.record = function(){ 
+  var options = { limit: 1, duration: 15 };
+  $cordovaCapture.captureVideo(options).then(
+      function(videoData) {
+          var i, path, len;
+          var pathtogo;
+          var pathtogostring;
+          for (i = 0, len = videoData.length; i < len; i += 1) {
+              path = videoData[i].fullPath;
+              pathtogo = path.toString();
+                pathtogostring = pathtogo.substr(6);  
+                 
+               /*var obj = {
+                    videoP: path,
+                    videosrc: pathtogostring
+              }
+
+             var postsRef = ref.child("videos");              //create a child node for firebase
+                var newPostRef = postsRef.push();
+                newPostRef.set({
+                     videoP: path,
+                    videosrc: pathtogostring
+      
+                });
+                */
+                  var postsRef = ref.child("upload");
+                var check = {
+                    fileKey: "avatar",
+                    fileName: "filename.mp4",
+                    chunkedMode: false,
+                    mimeType: "video/mp4"
+                };
+                 alert("Path of the video is = " + path.toString()); 
+                $cordovaFileTransfer.upload(postsRef, path, check).then(function(result) {
+                    alert("SUCCESS: " + JSON.stringify(result.response));
+                }, function(err) {
+                     alert("SERR: " + JSON.stringify(err));
+                }, function (progress) {
+                    // constant progress updates
+                });
+
+            }
+      },
+      function(err) {
+            }
+  );
+}//end record
 
 })
 .controller('DetailCtrl', function($scope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {

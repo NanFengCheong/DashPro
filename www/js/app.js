@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers','ionic-material', 'ionMdInput','firebase', 'ngStorage'])
+angular.module('starter', ['ionic', 'starter.controllers','ionic-material', 'ionMdInput','firebase', 'ngStorage','ngCordova'])
 
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -19,6 +19,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ionic-material', 'ion
         }
     });
 })
+
  .constant('FURL', 'https://dashpro.firebaseio.com/')
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
@@ -156,4 +157,17 @@ angular.module('starter', ['ionic', 'starter.controllers','ionic-material', 'ion
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/login');
-});
+})
+   .directive('keyboardHandler', function ($window) {
+    return {
+        restrict: 'A',
+        link: function postLink(scope, element, attrs) {
+            angular.element($window).bind('native.keyboardshow', function() {
+                element.addClass('tabs-item-hide');
+            });
+            angular.element($window).bind('native.keyboardhide', function() {
+                element.removeClass('tabs-item-hide');
+            });
+        }
+    };
+})
