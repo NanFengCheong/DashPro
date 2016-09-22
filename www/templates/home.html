@@ -1,6 +1,14 @@
 <ion-view view-title="Home">
-    <ion-content ng-class="{expanded:$scope.isExpanded}" class="homebackground">
-      
-      <button class="button button-icon icon ion-camera camera record" ng-click="upload()">Start Recording</button>
+    <ion-content ng-class="{expanded:$scope.isExpanded}" class="homebackground"> 
+             <div class="round-button">
+	     <div class="round-button-circle">
+		     <a href="#" class="round-button" ng-click="upload()">
+			     <icon class="icon ion-camera camera record"></icon>
+			     <br />
+			     Start Record
+		     </a>
+	     </div>
+     </div>
+
     </ion-content>
 </ion-view>

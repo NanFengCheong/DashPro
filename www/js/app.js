@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ionMdInput'])
+angular.module('starter', ['ionic', 'starter.controllers','ionic-material', 'ionMdInput','firebase', 'ngStorage'])
 
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -19,10 +19,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
         }
     });
 })
- .config(function ($ionicConfigProvider) {
-     //fixed tab bar always at bottom
-     $ionicConfigProvider.tabs.position('bottom');
- })
+ .constant('FURL', 'https://dashpro.firebaseio.com/')
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
     // Turn off caching for demo simplicity's sake
@@ -32,8 +29,22 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
     // Turn off back button text
     $ionicConfigProvider.backButton.previousTitleText(false);
     */
+    $stateProvider
+        //login router
+        .state('login', {
+          url: '/login',
+          templateUrl: 'templates/login.html',
+            controller: 'LoginCtrl',
+          resolve:{
+              "loggedIn":function($localStorage, $location,$ionicHistory){
+                  if($localStorage.username != null || $localStorage.username != undefined){   //resolve data to check user
+                     $location.path('/app/home');                                              //is logged in or not
+                     }  
+                  }
+              }
+        })
 
-    $stateProvider.state('app', {
+    .state('app', {
         url: '/app',
         abstract: true,
         templateUrl: 'templates/menu.html',
@@ -105,19 +116,25 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
         }
     })
 
-    .state('app.login', {
-        url: '/login',
+
+
+    .state('app.detail', {
+        url: '/detail',
         views: {
             'menuContent': {
-                templateUrl: 'templates/login.html',
-                controller: 'LoginCtrl'
+                templateUrl: 'templates/detail.html',
+                controller: 'DetailCtrl'
             },
             'fabContent': {
-                template: ''
+                template: '<button id="fab-profile" class="button button-fab button-fab-bottom-right button-energized-900"><i class="icon ion-plus"></i></button>',
+                controller: function ($timeout) {
+                    /*$timeout(function () {
+                        document.getElementById('fab-profile').classList.toggle('on');
+                    }, 800);*/
+                }
             }
         }
     })
-
     .state('app.profile', {
         url: '/profile',
         views: {
@@ -138,5 +155,5 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
     ;
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/login');
+    $urlRouterProvider.otherwise('/login');
 });

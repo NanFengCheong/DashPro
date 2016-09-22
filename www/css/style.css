@@ -78,8 +78,46 @@ p {
     bottom: 0;
 }
 .homebackground{
-    background-color: #eceff1;
+   background: url('../img/pexels-photo-58724.jpeg') center;
+   background-size: cover;
 }
-.button-icon{
-    margin-top:60px; 
+
+.round-button {
+    width:50%;
+
+}
+.round-button-circle {
+        margin-left: 100px;
+    width: 100%;
+    height:0;
+    padding-bottom: 100%;
+    border-radius: 50%;
+    border:10px solid #8B0000;
+    overflow:hidden;
+    margin-top:150px;
+    background: black; 
+    box-shadow: 0 0 3px gray;
+}
+.round-button-circle:hover {
+    background:#1a1a1a;
+}
+.round-button a {
+    display:block;
+    width:100%;
+    padding-top:40%;
+    padding-bottom:50%;
+    line-height:1em;
+    margin-top:-0.5em;
+    text-align:center;
+    color:#e2eaf3;
+    font-family:Verdana;
+    font-size:1.2em;
+    font-weight:bold;
+    text-decoration:none;
+}
+.record{
+    font-size: 30px;
+}
+.checkout{
+    margin-left: 20px;
 }

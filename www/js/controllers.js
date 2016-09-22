@@ -3,13 +3,13 @@
 
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout, $ionicHistory,Auth,$localStorage,$location) {
     // Form data for the login modal
     $scope.loginData = {};
     $scope.isExpanded = false;
     $scope.hasHeaderFabLeft = false;
     $scope.hasHeaderFabRight = false;
-
+    $scope.username = $localStorage.username;
     var navIcons = document.getElementsByClassName('ion-navicon');
     for (var i = 0; i < navIcons.length; i++) {
         navIcons.addEventListener('click', function() {
@@ -85,16 +85,74 @@ angular.module('starter.controllers', [])
             fabs[0].remove();
         }
     };
+      $scope.logOut = function () {
+    Auth.logout();
+    $localStorage.$reset();
+    $ionicHistory.clearCache();
+    $ionicHistory.clearHistory();
+    $ionicHistory.nextViewOptions({
+    disableAnimate: true,
+    disableBack: true
+     });
+       $location.path("/login");
+    }  
 })
 
-.controller('LoginCtrl', function($scope, $timeout, $stateParams, ionicMaterialInk) {
-    $scope.$parent.clearFabs();
-    $timeout(function() {
-        $scope.$parent.hideHeader();
-    }, 0);
-    ionicMaterialInk.displayEffect();
+.controller('LoginCtrl', function($scope, $state, $timeout, $stateParams, ionicMaterialInk,$ionicPopup,$firebaseObject, Auth, FURL, Utils,$ionicHistory, $localStorage, $location) {
+
+  var userkey = "";
+  var ref = new Firebase(FURL);
+  //trigger sign in function from button and send data to services code
+  $scope.signIn = function (user) {
+    console.log(user.email);
+    //diasble user to back to login page after signed in
+    $ionicHistory.nextViewOptions({
+    disableAnimate: true,
+    disableBack: true
+    });
+    Utils.show();
+    Auth.login(user)
+      .then(function(authData) {
+         Utils.hide();
+          $state.go('app.home');
+      //if success login, get profile infor and save to local storage
+      ref.child('users').on("child_added", function(snapshot) {
+        userkey = snapshot.key();
+        var obj = $firebaseObject(ref.child('users').child(userkey));
+        obj.$loaded()
+          .then(function(data) {
+            $localStorage.username = obj.name;
+            $localStorage.email = obj.email;
+            $localStorage.userkey = obj.$id;
+            $localStorage.address = obj.phone;
+            $localStorage.plate = obj.plate;
+            $localStorage.color = obj.color;
+            $localStorage.make = obj.make;
+            $localStorage.model = obj.model;
+            $localStorage.credit = obj.credit;
+            Utils.hide();
+          
+          })
+          .catch(function(error) {
+            console.error("Error:", error);
+          });
+      });
+      }, function(err) {
+        Utils.hide();
+         Utils.errMessage(err);
+      });
+  };
 })
-.controller('HomeCtrl', function($scope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+.controller('HomeCtrl', function($scope, $stateParams, $timeout) {
+    // Set Header
+    $scope.$parent.showHeader();
+    $scope.$parent.clearFabs();
+    $scope.isExpanded = false;
+    $scope.$parent.setExpanded(false);
+    $scope.$parent.setHeaderFab(false);
+
+})
+.controller('DetailCtrl', function($scope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
     // Set Header
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
@@ -140,7 +198,7 @@ angular.module('starter.controllers', [])
     ionicMaterialInk.displayEffect();
 })
 
-.controller('ProfileCtrl', function($scope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+.controller('ProfileCtrl', function($scope, $localStorage,$stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
     // Set Header
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
@@ -163,6 +221,18 @@ angular.module('starter.controllers', [])
 
     // Set Ink
     ionicMaterialInk.displayEffect();
+
+         $scope.username= $localStorage.username 
+           $scope.email=  $localStorage.email
+          $scope.address=   $localStorage.address
+          $scope.plate=   $localStorage.plate
+          $scope.color=   $localStorage.color
+         $scope.make=   $localStorage.make
+          $scope.model=   $localStorage.model
+           $scope.credit=  $localStorage.credit
+           $scope.score= $localStorage.score
+
+
 })
 
 .controller('ActivityCtrl', function($scope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
