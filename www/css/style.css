@@ -65,7 +65,7 @@ p {
 ==================================*/
 .app-icon {
     background-color: #fff;
-    background: url('../img/crown.jpg') center;
+    background: url('../img/DashCam.png') center;
     background-size: cover;
     border-radius: 50%;
     height: 125px;
@@ -84,6 +84,7 @@ p {
 
 .round-button {
     width:50%;
+    padding-top:150px;
 
 }
 .round-button-circle {
@@ -94,7 +95,7 @@ p {
     border-radius: 50%;
     border:10px solid #8B0000;
     overflow:hidden;
-    margin-top:150px;
+    
     background: black; 
     box-shadow: 0 0 3px gray;
 }
@@ -120,4 +121,23 @@ p {
 }
 .checkout{
     margin-left: 20px;
+}
+.popup-buttons .button{
+    background-color: #800000 !important;
+    color:white;
+}
+.date{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.has-header1 {
+    padding-top: 40px;
+}
+.background{
+    background-color: #eceff1;
+}
+.menubar{
+
+ background: url('../img/material-graphite.jpg') center;
+   background-size: cover;
 }

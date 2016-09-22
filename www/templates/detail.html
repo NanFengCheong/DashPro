@@ -1,22 +1,33 @@
 ﻿<ion-view view-title="Detail">
-    <ion-content ng-class="{expanded:$scope.isExpanded}">
-        <div class="hero slide-up" style="background-image: url('img/profile-bg.jpg');">
-        </div>
-        <h4 class="content padding double-padding-x">Summary</h4>
-        <div class="list animate-fade-slide-in-right">
+    <ion-content  class="background" ng-class="{expanded:isExpanded}">
+      <div ng-repeat="datas in data">
+         <img class="full-image" ng-src="data:image/jpeg;base64,{{datas.img}}">
+        <h5 style="padding-left:10px;"><strong>Report</strong></h5>
+ 
             <div class="list">
                    <a class="item item-icon-left" href="#">
-                    <i class="icon ion-email"></i>
-                    Date Created: 2016/09/22
+                    <strong>Date Created:</strong>{{datas.timestamp}}
                   </a>               
                   <a class="item item-icon-left" href="#">
-                    <i class="icon ion-email"></i>
-                    Status : 
+
+                    <strong>Status :</strong> {{datas.status}}
                   </a>
+                    <a class="item item-icon-left" href="#">
+                   <strong> Car Plate:</strong> {{datas.plate}}
+                  </a>
+                    </a>
+                    <a class="item item-icon-left" href="#">
+                    <strong>Type:</strong> {{datas.type}}
+                  </a>
+                   <a class="item item-icon-left" href="#">
+                   <strong> Place: </strong>{{datas.latitude}}, {{datas.longtitude}}
+                  </a>                
             </div>
-            <button class="button button-assertive checkout">
+            <button class="button button-assertive checkout" ng-click="submit()">
              Submit Report
             </button>
-        </div>
+
+      </div>
+      
     </ion-content>
 </ion-view>

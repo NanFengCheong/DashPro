@@ -179,15 +179,18 @@ $scope.record = function(){
       
                 });
                 */
-                  var postsRef = ref.child("upload");
                 var check = {
                     fileKey: "avatar",
                     fileName: "filename.mp4",
                     chunkedMode: false,
-                    mimeType: "video/mp4"
+                    mimeType: "video/mp4",
+                     headers: {
+                            "Content-Type": "multipart/form-data"
+                        }
+
                 };
                  alert("Path of the video is = " + path.toString()); 
-                $cordovaFileTransfer.upload(postsRef, path, check).then(function(result) {
+                $cordovaFileTransfer.upload("http://nanfengazure.cloudapp.net:4000/uploads", path, check).then(function(result) {
                     alert("SUCCESS: " + JSON.stringify(result.response));
                 }, function(err) {
                      alert("SERR: " + JSON.stringify(err));
@@ -203,30 +206,32 @@ $scope.record = function(){
 }//end record
 
 })
-.controller('DetailCtrl', function($scope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+.controller('DetailCtrl', function($scope, $ionicPopup,$state, $stateParams,FURL, $timeout,$localStorage, Utils,ionicMaterialMotion, ionicMaterialInk) {
     // Set Header
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
     $scope.isExpanded = false;
     $scope.$parent.setExpanded(false);
     $scope.$parent.setHeaderFab(false);
+ var ref = new Firebase(FURL);
 
-    // Set Motion
-    $timeout(function() {
-        ionicMaterialMotion.slideUp({
-            selector: '.slide-up'
-        });
-    }, 300);
 
-    $timeout(function() {
-        ionicMaterialMotion.fadeSlideInRight({
-            startVelocity: 3000
-        });
-    }, 700);
 
-    // Set Ink
-    ionicMaterialInk.displayEffect();
-
+    $scope.data={};
+    Utils.show();
+      ref.child('reports').orderByChild("bookmark-id").equalTo($localStorage.bookmarksId).on("value", function(snapshot) {
+        $scope.data = snapshot.val();
+        Utils.hide();
+      });
+           $scope.submit= function(){
+                var alertPopup = $ionicPopup.alert({
+                 title: 'Report submited successfully!',
+                 });
+                 alertPopup.then(function(res) {
+                      $state.go("app.home");
+                   });
+              
+           }
 })
 
 
@@ -247,9 +252,10 @@ $scope.record = function(){
 
     // Set Ink
     ionicMaterialInk.displayEffect();
+
 })
 
-.controller('ProfileCtrl', function($scope, $localStorage,$stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+.controller('ProfileCtrl', function($scope, $localStorage,$stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk,$ionicPopup) {
     // Set Header
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
@@ -283,10 +289,15 @@ $scope.record = function(){
            $scope.credit=  $localStorage.credit
            $scope.score= $localStorage.score
 
+           $scope.checkout= function(){
+                var alertPopup = $ionicPopup.alert({
+                 title: 'Balances are checked out successfully!',
+                 });
+           }
 
 })
 
-.controller('ActivityCtrl', function($scope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+.controller('ActivityCtrl', function($scope, Utils, FURL, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
     $scope.isExpanded = true;
@@ -301,15 +312,31 @@ $scope.record = function(){
 
     // Activate ink for controller
     ionicMaterialInk.displayEffect();
+    $scope.data=[]
+        var ref = new Firebase(FURL);
+     Utils.show();
+
+      ref.child('activities').once("value", function(snapshot) {
+         snapshot.forEach(function(item) {
+             var itemVal = item.val();
+             $scope.data.push({
+                    status : itemVal.status,
+                    id :item.key(),
+                    timestamp: itemVal.timestamp,
+              });  
+        });
+        Utils.hide();
+      });
+
 })
 
-.controller('GalleryCtrl', function($scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+.controller('GalleryCtrl', function($scope, $state, $stateParams, $timeout, FURL, $localStorage,ionicMaterialInk, ionicMaterialMotion,Utils) {
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
     $scope.isExpanded = true;
     $scope.$parent.setExpanded(true);
     $scope.$parent.setHeaderFab(false);
-
+    $scope.data = [];
     // Activate ink for controller
     ionicMaterialInk.displayEffect();
 
@@ -319,7 +346,26 @@ $scope.record = function(){
     ionicMaterialMotion.fadeSlideInRight({
         selector: '.animate-fade-slide-in .item'
     });
-
+    Utils.show();
+    var ref = new Firebase(FURL);
+      ref.child('bookmarks').once("value", function(snapshot) {
+         snapshot.forEach(function(item) {
+             var itemVal = item.val();
+             $scope.data.push({
+                    latitude :itemVal.latitude,
+                    longitude :itemVal.longitude,
+                    status : itemVal.status,
+                    id :item.key(),
+                    timestamp: itemVal.timestamp,
+                    img: itemVal.img
+              });  
+        });
+        Utils.hide();
+      });
+      $scope.specificItem= function(id){
+        $localStorage.bookmarksId = id;
+        $state.go("app.detail");
+      }
 })
 
 ;
