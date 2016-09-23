@@ -1,33 +1,36 @@
-﻿<ion-view view-title="Detail">
+﻿<ion-view view-title="Report">
     <ion-content  class="background" ng-class="{expanded:isExpanded}">
       <div ng-repeat="datas in data">
-         <img class="full-image" ng-src="data:image/jpeg;base64,{{datas.img}}">
-        <h5 style="padding-left:10px;"><strong>Report</strong></h5>
+          <img class="full-image" src="img/giphy.gif">
  
             <div class="list">
-                   <a class="item item-icon-left" href="#">
+                   <a class="item item-icon-left">
                     <strong>Date Created:</strong>{{datas.timestamp}}
                   </a>               
-                  <a class="item item-icon-left" href="#">
+                  <a class="item item-icon-left">
 
                     <strong>Status :</strong> {{datas.status}}
                   </a>
-                    <a class="item item-icon-left" href="#">
-                   <strong> Car Plate:</strong> {{datas.plate}}
-                  </a>
-                    </a>
-                    <a class="item item-icon-left" href="#">
-                    <strong>Type:</strong> {{datas.type}}
-                  </a>
-                   <a class="item item-icon-left" href="#">
-                   <strong> Place: </strong>{{datas.latitude}}, {{datas.longtitude}}
-                  </a>                
-            </div>
-            <button class="button button-assertive checkout" ng-click="submit()">
-             Submit Report
-            </button>
+                  <a class="item item-icon-left">
+                   <strong> Place: </strong>{{datas.latitude}}, &nbsp; {{datas.longtitude}}
+                  </a>  
+                <div class="item item-icon-left">
+                  <strong>Types :</strong> 
+                    <select ng-model= "report.types" class="select">
+                      <option value="Traffic" selected>Traffic offender</option>
+                      <option value="Criminal">Criminal</option>
+                    </select>
+                </div>
+             <div class="item item-icon-left">
 
-      </div>
-      
+                    <strong>Car Plate :</strong> 
+                    <input type="text" placeholder="{{datas.plate}}" ng-model="report.plate" />
+                </div>
+                 
+            </div>
+             <button class="button button-assertive checkout" ng-click="submit(datas, report)">
+             Submit Report 
+            </button>
+        </div>
     </ion-content>
 </ion-view>

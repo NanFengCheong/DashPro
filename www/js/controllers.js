@@ -124,12 +124,13 @@ angular.module('starter.controllers', [])
             $localStorage.username = obj.name;
             $localStorage.email = obj.email;
             $localStorage.userkey = obj.$id;
-            $localStorage.address = obj.phone;
+            $localStorage.phone = obj.phone;
             $localStorage.plate = obj.plate;
             $localStorage.color = obj.color;
             $localStorage.make = obj.make;
             $localStorage.model = obj.model;
             $localStorage.credit = obj.credit;
+            $localStorage.score = obj.score;
             Utils.hide();
           
           })
@@ -223,15 +224,27 @@ $scope.record = function(){
         $scope.data = snapshot.val();
         Utils.hide();
       });
-           $scope.submit= function(){
-                var alertPopup = $ionicPopup.alert({
-                 title: 'Report submited successfully!',
-                 });
-                 alertPopup.then(function(res) {
-                      $state.go("app.home");
-                   });
-              
-           }
+           $scope.report =[];
+    $scope.submit = function (datas, report) {
+
+    var postsRef = ref.child("activities");              //create a child node for firebase
+    var newPostRef = postsRef.push();
+    newPostRef.set({
+        latitude: datas.latitude,
+        longitude:datas.longitude,
+        plate:datas.plate,
+        status: datas.status,
+        timestamp:datas.timestamp,
+        type:report.types,
+
+    });
+         var alertPopup = $ionicPopup.alert({
+         title: 'Report submited successfully!',
+         });
+         alertPopup.then(function(res) {
+              $state.go("app.home");
+           });
+  }
 })
 
 
@@ -281,7 +294,7 @@ $scope.record = function(){
 
          $scope.username= $localStorage.username 
            $scope.email=  $localStorage.email
-          $scope.address=   $localStorage.address
+          $scope.phone=   $localStorage.phone
           $scope.plate=   $localStorage.plate
           $scope.color=   $localStorage.color
          $scope.make=   $localStorage.make
@@ -316,7 +329,7 @@ $scope.record = function(){
         var ref = new Firebase(FURL);
      Utils.show();
 
-      ref.child('activities').once("value", function(snapshot) {
+      ref.child('activities').on("value", function(snapshot) {
          snapshot.forEach(function(item) {
              var itemVal = item.val();
              $scope.data.push({
@@ -324,13 +337,14 @@ $scope.record = function(){
                     id :item.key(),
                     timestamp: itemVal.timestamp,
               });  
+             console.log($scope.data);
         });
         Utils.hide();
       });
 
 })
 
-.controller('GalleryCtrl', function($scope, $state, $stateParams, $timeout, FURL, $localStorage,ionicMaterialInk, ionicMaterialMotion,Utils) {
+.controller('GalleryCtrl', function($scope,$ionicPopup, $state, $stateParams, $timeout, FURL, $localStorage,ionicMaterialInk, ionicMaterialMotion,Utils) {
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
     $scope.isExpanded = true;
@@ -338,6 +352,7 @@ $scope.record = function(){
     $scope.$parent.setHeaderFab(false);
     $scope.data = [];
     // Activate ink for controller
+        var ref = new Firebase(FURL);
     ionicMaterialInk.displayEffect();
 
     ionicMaterialMotion.pushDown({
@@ -347,7 +362,7 @@ $scope.record = function(){
         selector: '.animate-fade-slide-in .item'
     });
     Utils.show();
-    var ref = new Firebase(FURL);
+
       ref.child('bookmarks').once("value", function(snapshot) {
          snapshot.forEach(function(item) {
              var itemVal = item.val();
@@ -366,6 +381,26 @@ $scope.record = function(){
         $localStorage.bookmarksId = id;
         $state.go("app.detail");
       }
+
+    $scope.delete =function(itemId){
+
+     var confirmPopup = $ionicPopup.confirm({
+             title: 'Delete Bookmarks',
+             template: 'Are you sure you want to delete this?'
+           });
+
+           confirmPopup.then(function(res) {
+             if(res) {
+                var postId = itemId.id;
+               var providersRef = ref.child('bookmarks');
+                providersRef.child(postId).remove();
+                $scope.data.splice($scope.data.indexOf(itemId), 1)
+             } else {
+               console.log('You are not sure');
+             }
+           });
+  
+  }
 })
 
 ;

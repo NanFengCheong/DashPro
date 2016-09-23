@@ -8,10 +8,9 @@
                      <h4 style="color:white">{{datas.timestamp}}</h4>
                       <img class="full-image" ng-src="data:image/jpeg;base64,{{datas.img}}">
                 </div>
-                    <a class="tab-item full-bg assertive">
-                            <i class="icon ion-heart"></i>
-                            6
-                     </a>
+                     <button class="button button-full button-assertive" ng-click="delete(datas)" >
+                    Delete
+                  </button>
                 </div>                      
             </div>
         </div>

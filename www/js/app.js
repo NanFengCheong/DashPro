@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers','ionic-material', 'ionMdInput','firebase', 'ngStorage','ngCordova'])
+angular.module('starter', ['ionic','starter.controllers','ionic-material', 'ionMdInput','firebase', 'ngStorage','ngCordova'])
 
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -127,12 +127,8 @@ angular.module('starter', ['ionic', 'starter.controllers','ionic-material', 'ion
                 controller: 'DetailCtrl'
             },
             'fabContent': {
-                template: '<button id="fab-profile" class="button button-fab button-fab-bottom-right button-energized-900"><i class="icon ion-plus"></i></button>',
-                controller: function ($timeout) {
-                    /*$timeout(function () {
-                        document.getElementById('fab-profile').classList.toggle('on');
-                    }, 800);*/
-                }
+               template: ''
+                
             }
         }
     })
