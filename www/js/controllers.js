@@ -180,25 +180,13 @@ $scope.record = function(){
       
                 });
                 */
-                var check = {
-                    fileKey: "avatar",
-                    fileName: "filename.mp4",
-                    chunkedMode: false,
-                    mimeType: "video/mp4",
-                     headers: {
-                            "Content-Type": "multipart/form-data"
-                        }
-
-                };
-                 alert("Path of the video is = " + path.toString()); 
-                $cordovaFileTransfer.upload("http://nanfengazure.cloudapp.net:4000/uploads", path, check).then(function(result) {
-                    alert("SUCCESS: " + JSON.stringify(result.response));
-                }, function(err) {
-                     alert("SERR: " + JSON.stringify(err));
-                }, function (progress) {
-                    // constant progress updates
-                });
-
+                  $scope.$parent.showHeader();
+                $scope.$parent.clearFabs();
+                $scope.isExpanded = false;
+                $scope.$parent.setExpanded(false);
+                $scope.$parent.setHeaderFab(false);
+            alert("Success Recorded "); 
+               
             }
       },
       function(err) {
@@ -226,14 +214,14 @@ $scope.record = function(){
       });
       if($localStorage.bookmarksId === '-KSI1024Q3XZujrJRBUx')
       {
-        $scope.gifUrl = "../img/1.gif";    
+        $scope.gifUrl = "img/1.gif";    
      }if($localStorage.bookmarksId === '-KSI1aFef745mbBnfcwX')
      {
-        $scope.gifUrl = "../img/2.gif";    
+        $scope.gifUrl = "img/2.gif";    
      }
         if($localStorage.bookmarksId==='-KSI1bLWv9u4AN3DB9ao')
      {
-        $scope.gifUrl = "../img/3.gif";    
+        $scope.gifUrl = "img/3.gif";    
      }
 
 

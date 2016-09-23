@@ -22,15 +22,17 @@
                     </select>
                 </div>
              <div class="item item-icon-left">
-
                     <strong>Car Plate :</strong> 
                     <input type="text" placeholder="{{datas.plate}}" ng-model="report.plate" />
                 </div>
                  
             </div>
-             <button class="button button-assertive checkout" ng-click="submit(datas, report)">
+          <div class="checkout">
+          <button class="button button-assertive" ng-click="submit(datas, report)">
              Submit Report 
             </button>
+          </div>
+
         </div>
     </ion-content>
 </ion-view>
