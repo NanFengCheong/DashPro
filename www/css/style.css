@@ -121,6 +121,7 @@ p {
 }
 .checkout{
     margin-left: 20px;
+    padding-bottom: 40px;
 }
 .popup-buttons .button{
     background-color: #800000 !important;
@@ -140,6 +141,7 @@ p {
 
  background: url('../img/material-graphite.jpg') center;
    background-size: cover;
+   
 }
 .select{
      background-color: #eceff1;
