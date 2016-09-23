@@ -217,13 +217,26 @@ $scope.record = function(){
  var ref = new Firebase(FURL);
 
 
-
+    $scope.gifUrl = {};
     $scope.data={};
     Utils.show();
       ref.child('reports').orderByChild("bookmark-id").equalTo($localStorage.bookmarksId).on("value", function(snapshot) {
         $scope.data = snapshot.val();
         Utils.hide();
       });
+      if($localStorage.bookmarksId === '-KSI1024Q3XZujrJRBUx')
+      {
+        $scope.gifUrl = "../img/1.gif";    
+     }if($localStorage.bookmarksId === '-KSI1aFef745mbBnfcwX')
+     {
+        $scope.gifUrl = "../img/2.gif";    
+     }
+        if($localStorage.bookmarksId==='-KSI1bLWv9u4AN3DB9ao')
+     {
+        $scope.gifUrl = "../img/3.gif";    
+     }
+
+
            $scope.report =[];
     $scope.submit = function (datas, report) {
 
